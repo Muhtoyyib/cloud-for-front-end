@@ -7,39 +7,47 @@ import { onCreateTodo } from "./graphql/subscriptions";
 
 Amplify.configure(awsconfig);
 
-async function createNewTodo() {
-  const todo = {
-    name: 'Use AppSync',
-    description: `Realtime and Offline (${new Date().toLocaleString()})`
-  };
-
-  return await API.graphql(graphqlOperation(createTodo, { input: todo }));
-}
-
-async function getData() {
-      API.graphql(graphqlOperation(listTodos)).then((evt) => {
-        evt.data.listTodos.items.map((todo, i) => {
-         QueryResult.innerHTML = `<p>${todo.name} - ${todo.description}</p>`;
-       });
-     });
-    }
-
 const MutationButton = document.getElementById('MutationEventButton');
 const MutationResult = document.getElementById('MutationResult');
 const QueryResult = document.getElementById("QueryResult");
 const SubscriptionResult = document.getElementById("SubscriptionResult");
 
-MutationButton.addEventListener('click', (evt) => {
+async function createNewTodo() {
+  const name = document.getElementById('name').value;
+  const description = document.getElementById('description').value;
+  
+  const todo = {
+    name,
+    description
+  };
+  
+  return await API.graphql(graphqlOperation(createTodo, { input: todo }));
+}
+
+const todoForm = document.getElementById('TodoForm');
+todoForm.addEventListener('submit', (event) => {
+  event.preventDefault(); 
   createNewTodo().then((evt) => {
+    console.log(evt.data.createTodo);
     MutationResult.innerHTML = `<p>${evt.data.createTodo.name} - ${evt.data.createTodo.description}</p>`;
   });
 });
+
+
+async function getData() {
+      API.graphql(graphqlOperation(listTodos)).then((evt) => {
+        evt.data.listTodos.items.map((todo) => {
+         QueryResult.innerHTML = `<p>${todo.name} - ${todo.description}</p>`;
+       });
+     });
+}
+
 
 API.graphql(graphqlOperation(onCreateTodo)).subscribe({
       next: (evt) => {
         const todo = evt.value.data.onCreateTodo;
         SubscriptionResult.innerHTML += `<p>${todo.name} - ${todo.description}</p>`;
       },
-    });
+});
 
 getData();

@@ -38,6 +38,7 @@
         width: 400px;
         margin: 0 auto;
         text-align: center;
+        position: relative;
       }
       .app-body button {
         background-color: #ff9900;
@@ -50,6 +51,17 @@
       .app-body button:hover {
         opacity: 0.8;
       }
+
+      #description{
+        position: absolute;
+        top: 50px;
+        right: -10px;
+      }
+
+      #name{
+        position: absolute;
+        left: 10px;
+      }
     </style>
   </head>
   
@@ -61,7 +73,15 @@
 
       <div class="app-body">
         <h1>Mutation Results</h1>
-        <button id="MutationEventButton">Add data</button>
+
+        <form id="TodoForm">
+          <input type="text" id="name" placeholder="Todo Name">
+          <textarea id="description" placeholder="Todo Description"></textarea> <br><br>
+          <button type="submit">Create Todo</button>
+        </form>
+        
+        <!-- <button id="MutationEventButton">Add data</button> -->
+        
         <div id="MutationResult"></div>
         <hr />
 
