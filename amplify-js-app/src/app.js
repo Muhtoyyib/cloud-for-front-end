@@ -7,7 +7,6 @@ import { onCreateTodo } from "./graphql/subscriptions";
 
 Amplify.configure(awsconfig);
 
-const MutationButton = document.getElementById('MutationEventButton');
 const MutationResult = document.getElementById('MutationResult');
 const QueryResult = document.getElementById("QueryResult");
 const SubscriptionResult = document.getElementById("SubscriptionResult");
@@ -27,6 +26,7 @@ async function createNewTodo() {
 const todoForm = document.getElementById('TodoForm');
 todoForm.addEventListener('submit', (event) => {
   event.preventDefault(); 
+  
   createNewTodo().then((evt) => {
     console.log(evt.data.createTodo);
     MutationResult.innerHTML = `<p>${evt.data.createTodo.name} - ${evt.data.createTodo.description}</p>`;
